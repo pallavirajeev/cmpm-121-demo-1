@@ -17,19 +17,41 @@ const pizzaCtr: HTMLDivElement = document.createElement("div");
 pizzaCtr.textContent = pizzaStr();
 pizzaCtr.style.fontSize = "20px";
 
+//let startClick = true;
+
 function setCtr() {
-  if (startClick) {
-    setInterval(setCtr, 1000);
-    startClick = false;
-  }
+  //   if (startClick) {
+  //     setInterval(setCtr, 1000);
+  //     startClick = false;
+  //   }
   ctr++;
   pizzaCtr.textContent = pizzaStr();
 }
 function pizzaStr() {
-  return `Pizza Count: ${ctr}`;
+  return `Pizza Count: ${ctr.toFixed(2)}`;
 }
 
-let startClick = true;
+let previousTimeStamp = 0;
+
+function step(timeStamp: number) {
+  if (!previousTimeStamp) {
+    previousTimeStamp = timeStamp;
+  }
+
+  const elapsed = (timeStamp - previousTimeStamp) / 1000;
+
+  //should not assume 60 fps
+
+  ctr += elapsed;
+
+  pizzaCtr.textContent = pizzaStr();
+
+  previousTimeStamp = timeStamp;
+
+  requestAnimationFrame(step);
+}
+
+requestAnimationFrame(step);
 
 document.title = gameName;
 
