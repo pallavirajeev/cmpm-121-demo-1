@@ -25,6 +25,8 @@ function pizzaStr() {
   return `Pizza Count: ${ctr}`;
 }
 
+setInterval(setCtr, 1000);
+
 document.title = gameName;
 
 const header = document.createElement("h1");
