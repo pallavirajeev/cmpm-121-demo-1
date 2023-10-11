@@ -18,6 +18,10 @@ pizzaCtr.textContent = pizzaStr();
 pizzaCtr.style.fontSize = "20px";
 
 function setCtr() {
+  if (startClick) {
+    setInterval(setCtr, 1000);
+    startClick = false;
+  }
   ctr++;
   pizzaCtr.textContent = pizzaStr();
 }
@@ -25,7 +29,7 @@ function pizzaStr() {
   return `Pizza Count: ${ctr}`;
 }
 
-setInterval(setCtr, 1000);
+let startClick = true;
 
 document.title = gameName;
 
