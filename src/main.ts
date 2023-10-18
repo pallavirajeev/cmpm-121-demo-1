@@ -33,12 +33,45 @@ interface Item {
   cost: number;
   rate: number;
   emoji: string;
+  desc: string;
 }
 
 const availableItems: Item[] = [
-  { name: "Scooter", cost: 10, rate: 0.1, emoji: "🛴" },
-  { name: "Moped", cost: 100, rate: 2, emoji: "🛵" },
-  { name: "Motorcycle", cost: 1000, rate: 50, emoji: "🏍️" },
+  {
+    name: "Scooter",
+    cost: 10,
+    rate: 0.1,
+    emoji: "🛴",
+    desc: "A scooter is better than walking",
+  },
+  {
+    name: "Moped",
+    cost: 100,
+    rate: 2,
+    emoji: "🛵",
+    desc: "Now your feet can get a rest from pushing",
+  },
+  {
+    name: "Motorcycle",
+    cost: 1000,
+    rate: 50,
+    emoji: "🏍️",
+    desc: "Wow, you're making great time",
+  },
+  {
+    name: "Car",
+    cost: 10000,
+    rate: 100,
+    emoji: "🛻",
+    desc: "Nice, you can carry so many more pizzas",
+  },
+  {
+    name: "Airplane",
+    cost: 100000,
+    rate: 10000,
+    emoji: "🛩️",
+    desc: "Zoooooom, off you go",
+  },
 ];
 
 const itemCounts: { [name: string]: number } = {};
@@ -54,7 +87,7 @@ availableItems.forEach((item) => {
     item.cost
   } pizzas first! # of ${item.name}s bought: ${itemCounts[item.name].toFixed(
     0,
-  )}`;
+  )}, ${item.desc}`;
   button.addEventListener("click", () => buyItem(item));
   button.disabled = true;
   itemButtons[item.name] = button;
@@ -80,7 +113,7 @@ function buyItem(item: Item) {
       2,
     )} pizzas first! # of ${itemName}s bought: ${itemCounts[itemName].toFixed(
       0,
-    )}`;
+    )}, ${item.desc}`;
     if (ctr < itemCost) {
       itemButtons[itemName].disabled = true;
     }
