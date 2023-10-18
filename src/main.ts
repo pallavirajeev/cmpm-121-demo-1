@@ -28,103 +28,61 @@ function rateStr() {
   return `Current Delivery Rate: ${growthRate.toFixed(2)} pizzas/sec`;
 }
 
-let ctrS = 0;
-let ctrM = 0;
-let ctrMo = 0;
-
-let priceS = 10;
-let priceM = 100;
-let priceMo = 1000;
-
-const scooterButton = document.createElement("button");
-scooterButton.type = "button";
-scooterButton.style.marginTop = "20px";
-scooterButton.textContent = `A Scooter: 🛴, Deliver at least 10 pizzas first! # of scooters bought: ${ctrS.toFixed(
-  0,
-)}`;
-scooterButton.addEventListener("click", scootCtr);
-scooterButton.disabled = true;
-
-const mopedButton = document.createElement("button");
-mopedButton.type = "button";
-mopedButton.style.marginTop = "20px";
-mopedButton.style.marginLeft = "20px";
-mopedButton.textContent = `A Moped: 🛵, Deliver at least 100 pizzas first! # of mopeds bought: ${ctrM.toFixed(
-  0,
-)}`;
-mopedButton.addEventListener("click", mopedCtr);
-mopedButton.disabled = true;
-
-const moterButton = document.createElement("button");
-moterButton.type = "button";
-moterButton.style.marginTop = "20px";
-moterButton.style.marginLeft = "20px";
-moterButton.textContent = `A Motorcycle: 🏍️, Deliver at least 1000 pizzas first! # of motorcycles bought: ${ctrMo.toFixed(
-  0,
-)}`;
-moterButton.addEventListener("click", moterCtr);
-
-moterButton.disabled = true;
-
-function scootCtr() {
-  priceS *= 1.15;
-  ctrS++;
-  if (ctr >= 10) {
-    if (!startClick) {
-      startClick = true;
-      requestAnimationFrame(step);
-    }
-    ctr -= 10;
-    growthRate += 0.1;
-    pizzaCtr.textContent = pizzaStr();
-    rateText.textContent = rateStr();
-    scooterButton.textContent = `A Scooter: 🛴, Deliver at least ${priceS.toFixed(
-      2,
-    )} pizzas first! # bought: ${ctrS.toFixed(0)}`;
-    if (ctr < priceS) {
-      scooterButton.disabled = true;
-    }
-  }
+interface Item {
+  name: string;
+  cost: number;
+  rate: number;
+  emoji: string;
 }
 
-function mopedCtr() {
-  ctrM++;
-  priceM *= 1.15;
-  if (ctr >= 100) {
-    if (!startClick) {
-      startClick = true;
-      requestAnimationFrame(step);
-    }
-    ctr -= 100;
-    growthRate += 2;
-    pizzaCtr.textContent = pizzaStr();
-    rateText.textContent = rateStr();
-    mopedButton.textContent = `A Moped: 🛵, Deliver at least ${priceM.toFixed(
-      2,
-    )} pizzas first! # bought: ${ctrM.toFixed(0)}`;
-    if (ctr < 100) {
-      mopedButton.disabled = true;
-    }
-  }
-}
+const availableItems: Item[] = [
+  { name: "Scooter", cost: 10, rate: 0.1, emoji: "🛴" },
+  { name: "Moped", cost: 100, rate: 2, emoji: "🛵" },
+  { name: "Motorcycle", cost: 1000, rate: 50, emoji: "🏍️" },
+];
 
-function moterCtr() {
-  ctrMo++;
-  priceMo *= 1.15;
-  if (ctr >= 1000) {
+const itemCounts: { [name: string]: number } = {};
+
+const itemButtons: { [name: string]: HTMLButtonElement } = {};
+
+availableItems.forEach((item) => {
+  itemCounts[item.name] = 0;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.style.marginTop = "20px";
+  button.textContent = `${item.name}: ${item.emoji}, Deliver at least ${
+    item.cost
+  } pizzas first! # of ${item.name}s bought: ${itemCounts[item.name].toFixed(
+    0,
+  )}`;
+  button.addEventListener("click", () => buyItem(item));
+  button.disabled = true;
+  itemButtons[item.name] = button;
+});
+
+function buyItem(item: Item) {
+  const itemName = item.name;
+  const itemCost = item.cost;
+  if (ctr >= itemCost) {
+    itemCounts[itemName]++;
+    item.cost *= 1.15;
     if (!startClick) {
       startClick = true;
       requestAnimationFrame(step);
     }
-    ctr -= 1000;
-    growthRate += 50;
+    ctr -= itemCost;
+    growthRate += item.rate;
     pizzaCtr.textContent = pizzaStr();
     rateText.textContent = rateStr();
-    moterButton.textContent = `A Motorcycle: 🏍️, Deliver at least ${priceMo.toFixed(
+    itemButtons[itemName].textContent = `${itemName}: ${
+      item.emoji
+    }, Deliver at least ${item.cost.toFixed(
       2,
-    )} pizzas first! # bought: ${ctrMo.toFixed(0)}`;
-    if (ctr < 1000) {
-      mopedButton.disabled = true;
+    )} pizzas first! # of ${itemName}s bought: ${itemCounts[itemName].toFixed(
+      0,
+    )}`;
+    if (ctr < itemCost) {
+      itemButtons[itemName].disabled = true;
     }
   }
 }
@@ -133,8 +91,8 @@ let startClick = false;
 function setCtr() {
   ctr++;
   pizzaCtr.textContent = pizzaStr();
-  if (ctr >= 10) {
-    scooterButton.disabled = false;
+  if (ctr >= availableItems[0].cost) {
+    itemButtons[availableItems[0].name].disabled = false;
   }
 }
 
@@ -157,23 +115,13 @@ function step(timeStamp: number) {
   previousTimeStamp = timeStamp;
 
   requestAnimationFrame(step);
-  if (ctr >= priceS) {
-    scooterButton.disabled = false;
-  } else {
-    scooterButton.disabled = true;
-  }
-
-  if (ctr >= priceM) {
-    mopedButton.disabled = false;
-  } else {
-    mopedButton.disabled = true;
-  }
-
-  if (ctr >= priceMo) {
-    moterButton.disabled = false;
-  } else {
-    moterButton.disabled = true;
-  }
+  availableItems.forEach((item) => {
+    if (ctr >= item.cost) {
+      itemButtons[item.name].disabled = false;
+    } else {
+      itemButtons[item.name].disabled = true;
+    }
+  });
 }
 
 document.title = gameName;
@@ -185,6 +133,6 @@ app.append(header);
 app.append(pizzaButton);
 app.append(pizzaCtr);
 app.append(rateText);
-app.append(scooterButton);
-app.append(mopedButton);
-app.append(moterButton);
+availableItems.forEach((item) => {
+  app.append(itemButtons[item.name]);
+});
