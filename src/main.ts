@@ -32,6 +32,10 @@ let ctrS = 0;
 let ctrM = 0;
 let ctrMo = 0;
 
+let priceS = 10;
+let priceM = 100;
+let priceMo = 1000;
+
 const scooterButton = document.createElement("button");
 scooterButton.type = "button";
 scooterButton.style.marginTop = "20px";
@@ -63,6 +67,7 @@ moterButton.addEventListener("click", moterCtr);
 moterButton.disabled = true;
 
 function scootCtr() {
+  priceS *= 1.15;
   ctrS++;
   if (ctr >= 10) {
     if (!startClick) {
@@ -73,10 +78,10 @@ function scootCtr() {
     growthRate += 0.1;
     pizzaCtr.textContent = pizzaStr();
     rateText.textContent = rateStr();
-    scooterButton.textContent = `A Scooter: 🛴, Deliver at least 10 pizzas first! # bought: ${ctrS.toFixed(
-      0,
-    )}`;
-    if (ctr < 10) {
+    scooterButton.textContent = `A Scooter: 🛴, Deliver at least ${priceS.toFixed(
+      2,
+    )} pizzas first! # bought: ${ctrS.toFixed(0)}`;
+    if (ctr < priceS) {
       scooterButton.disabled = true;
     }
   }
@@ -84,6 +89,7 @@ function scootCtr() {
 
 function mopedCtr() {
   ctrM++;
+  priceM *= 1.15;
   if (ctr >= 100) {
     if (!startClick) {
       startClick = true;
@@ -93,9 +99,9 @@ function mopedCtr() {
     growthRate += 2;
     pizzaCtr.textContent = pizzaStr();
     rateText.textContent = rateStr();
-    mopedButton.textContent = `A Moped: 🛵, Deliver at least 100 pizzas first! # bought: ${ctrM.toFixed(
-      0,
-    )}`;
+    mopedButton.textContent = `A Moped: 🛵, Deliver at least ${priceM.toFixed(
+      2,
+    )} pizzas first! # bought: ${ctrM.toFixed(0)}`;
     if (ctr < 100) {
       mopedButton.disabled = true;
     }
@@ -104,6 +110,7 @@ function mopedCtr() {
 
 function moterCtr() {
   ctrMo++;
+  priceMo *= 1.15;
   if (ctr >= 1000) {
     if (!startClick) {
       startClick = true;
@@ -113,9 +120,9 @@ function moterCtr() {
     growthRate += 50;
     pizzaCtr.textContent = pizzaStr();
     rateText.textContent = rateStr();
-    moterButton.textContent = `A Motorcycle: 🏍️, Deliver at least 1000 pizzas first! # bought: ${ctrMo.toFixed(
-      0,
-    )}`;
+    moterButton.textContent = `A Motorcycle: 🏍️, Deliver at least ${priceMo.toFixed(
+      2,
+    )} pizzas first! # bought: ${ctrMo.toFixed(0)}`;
     if (ctr < 1000) {
       mopedButton.disabled = true;
     }
@@ -150,19 +157,19 @@ function step(timeStamp: number) {
   previousTimeStamp = timeStamp;
 
   requestAnimationFrame(step);
-  if (ctr >= 10) {
+  if (ctr >= priceS) {
     scooterButton.disabled = false;
   } else {
     scooterButton.disabled = true;
   }
 
-  if (ctr >= 100) {
+  if (ctr >= priceM) {
     mopedButton.disabled = false;
   } else {
     mopedButton.disabled = true;
   }
 
-  if (ctr >= 1000) {
+  if (ctr >= priceMo) {
     moterButton.disabled = false;
   } else {
     moterButton.disabled = true;
