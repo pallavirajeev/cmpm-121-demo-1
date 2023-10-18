@@ -25,7 +25,7 @@ rateText.style.fontSize = "20px";
 rateText.style.marginTop = "20px";
 
 function rateStr() {
-  return `Current Growth Rate: ${growthRate.toFixed(2)} pizzas/sec`;
+  return `Current Delivery Rate: ${growthRate.toFixed(2)} pizzas/sec`;
 }
 
 let ctrS = 0;
@@ -39,7 +39,7 @@ let priceMo = 1000;
 const scooterButton = document.createElement("button");
 scooterButton.type = "button";
 scooterButton.style.marginTop = "20px";
-scooterButton.textContent = `A Scooter: 🛴, Deliver at least 10 pizzas first! # bought: ${ctrS.toFixed(
+scooterButton.textContent = `A Scooter: 🛴, Deliver at least 10 pizzas first! # of scooters bought: ${ctrS.toFixed(
   0,
 )}`;
 scooterButton.addEventListener("click", scootCtr);
@@ -49,7 +49,7 @@ const mopedButton = document.createElement("button");
 mopedButton.type = "button";
 mopedButton.style.marginTop = "20px";
 mopedButton.style.marginLeft = "20px";
-mopedButton.textContent = `A Moped: 🛵, Deliver at least 100 pizzas first! # bought: ${ctrM.toFixed(
+mopedButton.textContent = `A Moped: 🛵, Deliver at least 100 pizzas first! # of mopeds bought: ${ctrM.toFixed(
   0,
 )}`;
 mopedButton.addEventListener("click", mopedCtr);
@@ -59,7 +59,7 @@ const moterButton = document.createElement("button");
 moterButton.type = "button";
 moterButton.style.marginTop = "20px";
 moterButton.style.marginLeft = "20px";
-moterButton.textContent = `A Motorcycle: 🏍️, Deliver at least 1000 pizzas first! # bought: ${ctrMo.toFixed(
+moterButton.textContent = `A Motorcycle: 🏍️, Deliver at least 1000 pizzas first! # of motorcycles bought: ${ctrMo.toFixed(
   0,
 )}`;
 moterButton.addEventListener("click", moterCtr);
